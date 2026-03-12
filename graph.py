@@ -25,6 +25,7 @@ def load_llm():
         max_tokens=512
     )
 
+
 # Load FAISS DB
 DB_FAISS_PATH = "vectorstore/db_faiss"
 embedding_model = HuggingFaceEmbeddings(
@@ -35,3 +36,20 @@ db = FAISS.load_local(
     embedding_model,
     allow_dangerous_deserialization=True
 )
+
+
+# Prompt
+CUSTOM_PROMPT_TEMPLATE = """
+Use the pieces of information provided in the context to answer the user's question.
+If you don't know the answer, just say that you don't know.
+Don't try to make up an answer.
+Don't provide anything outside the given context.
+
+Context:{context}
+Question:{question}
+
+Start the answer directly. No small talk.
+"""
+
+def set_custom_prompt(template):
+    return PromptTemplate(template=template, input_variables=["context", "question"])
