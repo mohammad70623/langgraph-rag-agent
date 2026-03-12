@@ -1,6 +1,7 @@
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
-from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
+from langchain_community.document_loaders import DirectoryLoader
+from langchain_community.document_loaders import PyMuPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
@@ -14,12 +15,25 @@ from langgraph.prebuilt import ToolNode, tools_condition
 load_dotenv()
 llm = ChatGroq(model="openai/gpt-oss-safeguard-20b", temperature=0.2)
 
+#load pdf
 DATA_PATH = "data/"
 def load_pdf_files(data): 
     loader = DirectoryLoader(data, 
                             glob = '*.pdf', 
-                            loader_cls = PyPDFLoader)
+                            loader_cls = PyMuPDFLoader)
 
     documents = loader.load() 
     return documents
+
+documents = load_pdf_files(data=DATA_PATH)
+
+#Creat Chunks
+def creat_chunks(extracted_data): 
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 500, 
+                                                  chunk_overlap = 50)
+    text_chunks = text_splitter.split_documents(extracted_data)
+    return text_chunks 
+text_chunks = creat_chunks(extracted_data = documents)
+print("Length of chunks:", len(text_chunks))
+
 
