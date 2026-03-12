@@ -86,3 +86,15 @@ def rag_tool(query: str) -> dict:
 
 tools = [rag_tool]
 llm_with_tools = llm.bind_tools(tools) 
+
+# State
+class ChatState(TypedDict):
+    messages: Annotated[list[BaseMessage], add_messages]
+
+# Nodes
+def chat_node(state: ChatState):
+    messages = state["messages"]
+    response = llm_with_tools.invoke(messages)
+    return {"messages": [response]}
+
+tool_node = ToolNode(tools)
