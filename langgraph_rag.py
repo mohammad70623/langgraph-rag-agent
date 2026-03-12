@@ -12,6 +12,7 @@ from langgraph.graph.message import add_messages
 from langchain_core.messages import HumanMessage, BaseMessage
 from langgraph.prebuilt import ToolNode, tools_condition
 import os
+from langchain_core.prompts import PromptTemplate
 
 load_dotenv()
 llm = ChatGroq(model="openai/gpt-oss-safeguard-20b", temperature=0.2)
@@ -47,3 +48,22 @@ DB_FAISS_PATH = "vectorstore/db_faiss"
 os.makedirs(os.path.dirname(DB_FAISS_PATH), exist_ok=True)
 db = FAISS.from_documents(text_chunks, embedding_model)
 db.save_local(DB_FAISS_PATH)
+
+CUSTOM_PROMPT_TEMPLATE = """
+Use the pieces of information provided in the context to answer the user's question.
+If you don't know the answer, just say that you don't know.
+Don't try to make up an answer.
+Don't provide anything outside the given context.
+
+Context:{context}
+Question:{question}
+
+Start the answer directly. No small talk.
+"""
+
+def set_custom_prompt(custom_prompt_template):
+    prompt = PromptTemplate(
+        template=custom_prompt_template,
+        input_variables=["context", "question"]
+    )
+    return prompt
