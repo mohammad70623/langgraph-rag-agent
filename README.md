@@ -1,6 +1,6 @@
 # LangGraph RAG Agent
 
-A conversational chatbot that can answer questions from your own PDF documents. Ask it anything — if the answer is in your files, it'll find it.
+A conversational chatbot that can answer questions from your own PDF documents. Ask it anything - if the answer is in your files, it'll find it.
 
 ---
 
@@ -79,8 +79,8 @@ Type `exit` to quit.
 
 ## Stack
 
-- [LangGraph](https://github.com/langchain-ai/langgraph) — agent graph
-- [LangChain](https://github.com/langchain-ai/langchain) — document loading, splitting, QA chain
-- [Groq](https://groq.com) — LLM inference (Llama 3.3 70B)
-- [FAISS](https://github.com/facebookresearch/faiss) — local vector store
-- [HuggingFace Sentence Transformers](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) — embeddings
+- [LangGraph](https://github.com/langchain-ai/langgraph) - agent graph
+- [LangChain](https://github.com/langchain-ai/langchain) - document loading, splitting, QA chain
+- [Groq](https://groq.com) - LLM inference (Llama 3.3 70B)
+- [FAISS](https://github.com/facebookresearch/faiss) - local vector store
+- [HuggingFace Sentence Transformers](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) - embeddings
