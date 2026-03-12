@@ -34,6 +34,11 @@ def creat_chunks(extracted_data):
     text_chunks = text_splitter.split_documents(extracted_data)
     return text_chunks 
 text_chunks = creat_chunks(extracted_data = documents)
-print("Length of chunks:", len(text_chunks))
+
+#create embedding
+def get_embedding_model(): 
+    embedding_model = HuggingFaceEmbeddings(model_name = "sentence-transformers/all-MiniLM-L6-v2")
+    return embedding_model
+embedding_model = get_embedding_model()
 
 
