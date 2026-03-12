@@ -24,3 +24,14 @@ def load_llm():
         temperature=0.5,
         max_tokens=512
     )
+
+# Load FAISS DB
+DB_FAISS_PATH = "vectorstore/db_faiss"
+embedding_model = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
+)
+db = FAISS.load_local(
+    DB_FAISS_PATH,
+    embedding_model,
+    allow_dangerous_deserialization=True
+)
