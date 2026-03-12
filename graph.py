@@ -1,11 +1,11 @@
 from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain_classic.chains.retrieval_qa.base import RetrievalQA                         
+from langchain.chains import RetrievalQA
 from langchain_core.prompts import PromptTemplate
 from langchain_core.tools import tool
 from langgraph.graph import StateGraph, START, END
-from langchain_core.messages import HumanMessage, AIMessage, BaseMessage 
+from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
 from typing import Annotated, TypedDict
@@ -25,7 +25,6 @@ def load_llm():
         max_tokens=512
     )
 
-
 # Load FAISS DB
 DB_FAISS_PATH = "vectorstore/db_faiss"
 embedding_model = HuggingFaceEmbeddings(
@@ -36,7 +35,6 @@ db = FAISS.load_local(
     embedding_model,
     allow_dangerous_deserialization=True
 )
-
 
 # Prompt
 CUSTOM_PROMPT_TEMPLATE = """
@@ -53,7 +51,6 @@ Start the answer directly. No small talk.
 
 def set_custom_prompt(template):
     return PromptTemplate(template=template, input_variables=["context", "question"])
-
 
 # QA Chain
 llm = load_llm()
@@ -85,7 +82,7 @@ def rag_tool(query: str) -> dict:
     }
 
 tools = [rag_tool]
-llm_with_tools = llm.bind_tools(tools) 
+llm_with_tools = llm.bind_tools(tools)
 
 # State
 class ChatState(TypedDict):
