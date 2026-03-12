@@ -64,3 +64,25 @@ qa_chain = RetrievalQA.from_chain_type(
     return_source_documents=True,
     chain_type_kwargs={"prompt": set_custom_prompt(CUSTOM_PROMPT_TEMPLATE)}
 )
+
+@tool
+def rag_tool(query: str) -> dict:
+    """
+    Retrieve relevant information from the pdf document.
+    Use this tool when the user asks factual / conceptual questions
+    that might be answered from the stored documents.
+    """
+    result = qa_chain.invoke({"query": query})
+
+    context = [doc.page_content for doc in result["source_documents"]]
+    metadata = [doc.metadata for doc in result["source_documents"]]
+
+    return {
+        "query": query,
+        "result": result["result"],
+        "context": context,
+        "metadata": metadata
+    }
+
+tools = [rag_tool]
+llm_with_tools = llm.bind_tools(tools) 
