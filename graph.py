@@ -15,7 +15,7 @@ import os
 load_dotenv()
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-GROQ_MODEL_NAME = "llama-3.1-8b-instant"
+GROQ_MODEL_NAME = "llama-3.3-70b-versatile"  # ✅ tool calling এর জন্য best model
 
 def load_llm():
     return ChatGroq(
@@ -63,23 +63,14 @@ qa_chain = RetrievalQA.from_chain_type(
 )
 
 @tool
-def rag_tool(query: str) -> dict:
+def rag_tool(query: str) -> str:  # ✅ return type str - Groq এর জন্য stable
     """
     Retrieve relevant information from the pdf document.
-    Use this tool when the user asks factual / conceptual questions
+    Use this tool when the user asks factual or conceptual questions
     that might be answered from the stored documents.
     """
     result = qa_chain.invoke({"query": query})
-
-    context = [doc.page_content for doc in result["source_documents"]]
-    metadata = [doc.metadata for doc in result["source_documents"]]
-
-    return {
-        "query": query,
-        "result": result["result"],
-        "context": context,
-        "metadata": metadata
-    }
+    return result["result"]  # ✅ শুধু answer string return করো
 
 tools = [rag_tool]
 llm_with_tools = llm.bind_tools(tools)
