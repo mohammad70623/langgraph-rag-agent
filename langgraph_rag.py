@@ -11,6 +11,7 @@ from typing import Annotated, TypedDict
 from langgraph.graph.message import add_messages
 from langchain_core.messages import HumanMessage, BaseMessage
 from langgraph.prebuilt import ToolNode, tools_condition
+import os
 
 load_dotenv()
 llm = ChatGroq(model="openai/gpt-oss-safeguard-20b", temperature=0.2)
@@ -41,4 +42,8 @@ def get_embedding_model():
     return embedding_model
 embedding_model = get_embedding_model()
 
-
+#Store Embedding on FAISS
+DB_FAISS_PATH = "vectorstore/db_faiss"
+os.makedirs(os.path.dirname(DB_FAISS_PATH), exist_ok=True)
+db = FAISS.from_documents(text_chunks, embedding_model)
+db.save_local(DB_FAISS_PATH)
